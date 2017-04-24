@@ -1,0 +1,17 @@
+Configuración del proyecto y pasos para crearlo
+
+Passos:
+1.- Hice un download desde platzi del proyecto y lo almacene en mi carpeta c:\temp\platzigram
+2.- Cree un repositorio en mi cuenta de GitHub con el nombre Platzigram (Your Profile -> Aba Repository -> New)
+3.-Genere desde la consola (parado en el la carpeta del proyecto) un SSH con el siguiente comando: 
+	ssh-keygen -t rsa -b 4096 -C "keimerrzc@gmail.com"  
+Coloque como nombre de archivo Platzigram y sin password, esto genero dos archivos en la carpeta del proyecto Platzigram y Platzigram.pub
+4.- Registre en GitHub un SSH, para ello abri el archivo anteriormente generado Platzigram.pub y copie la clave (gigante) y fue pegada en "Setting->SSH Keys -> New SSH", se le coloco el nombre Platzigram para el nombre del SSH .
+5.- Conectamos el repositorio remoto ubicado en "c:\temp\platzigram" con el repositorio de mi cuenta en GitHub usando el SSH del repositorio creado en el punto 2 (Github -> Your Profile -> Aba Repositories -> Platzigram-> SSH) con el siguiente comando:
+	
+
+git remote add origin_KZ git@github.com:keimer/Platzigram.git
+
+
+Fue usado el nombre "origin_KZ" porque ya existia el nombre "origin" del proyecto original, "origin_kz" es con kz en minuscula y se debe usar tal cual al momento de hacer un push.
+

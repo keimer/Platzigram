@@ -4,7 +4,7 @@ var rename = require('gulp-rename');
 var babel = require('babelify');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
-var watchify = require('watchify');
+//var watchify = require('watchify');
 
 gulp.task('styles', function () {
   gulp
@@ -20,16 +20,17 @@ gulp.task('assets', function () {
     .pipe(gulp.dest('public'));
 })
 
-function compile(watch) {
+//function compile(watch) {
+function compile() {
   var bundle = browserify('./src/index.js', {debug: true});
 
-  if (watch) {
+  /*if (watch) {
     bundle = watchify(bundle);
     bundle.on('update', function () {
       console.log('--> Bundling...');
       rebundle();
     });
-  }
+  }*/
 
   function rebundle() {
     bundle
@@ -37,7 +38,7 @@ function compile(watch) {
       .bundle()
       .on('error', function (err) { console.log(err); this.emit('end') })
       .pipe(source('index.js'))
-      .pipe(rename('app.js'))
+      .pipe(rename('app.js')) 
       .pipe(gulp.dest('public'));
   }
 
@@ -48,7 +49,7 @@ gulp.task('build', function () {
   return compile();
 });
 
-gulp.task('watch', function () { return compile(true); });
+//gulp.task('watch', function () { return compile(true); });
 
 gulp.task('default', ['styles', 'assets', 'build']);
 
