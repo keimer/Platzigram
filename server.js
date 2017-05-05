@@ -1,17 +1,41 @@
 var express = require('express');
 var multer  = require('multer');
 var ext = require('file-extension');
+var multerS3 = require('multer-S3');
+var aws = require('aws-sdk');
+var config = require('./config');
 
-var storage = multer.diskStorage({
+//Almacena el archivo deseado en el Upload en un Bucket creado en el S3 del Amazon Web Service 
+var s3 = new aws.S3({
+  accessKeyId: config.aws.accessKey,
+  secretAccessKey: config.aws.secretKey
+});
+
+console.log(config.aws.accessKey);
+var storageS3 = multerS3({
+  s3: s3,
+  bucket: 'platzinobit',
+  acl: 'public-read',
+  metadata: function(req, file, cb){
+    cb(null,{ fieldName: file.fieldName});
+  },
+  key: function(req, file, cb){
+    cb(null, +Date.now() + '.' + ext(file.originalname));
+  }
+});
+
+//almacena el archivo deseado en el Upload en el File System del equipo usando multer
+/*var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, './uploads')
   },
   filename: function (req, file, cb) {
     cb(null, +Date.now() + '.' + ext(file.originalname))
   }
-})
+})*/
  
-var upload = multer({ storage: storage }).single('picture');
+var upload = multer({ storage: storageS3 }).single('picture'); 
+//var upload = multer({ storage: storage }).single('picture');
 
 var app = express();
 
@@ -63,7 +87,8 @@ app.get('/api/pictures', function (req, res, next) {
 app.post('/api/pictures', function (req, res) {
   upload(req, res, function (err) {
     if (err) {
-      return res.send(500, "Error uploading file");
+      //return res.send(500, "Error uploading file");
+      return res.status(500).send("Error uploading file");
     }
     res.send('File uploaded');
   })
